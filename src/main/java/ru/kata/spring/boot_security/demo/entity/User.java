@@ -1,6 +1,8 @@
 package ru.kata.spring.boot_security.demo.entity;
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,30 +17,37 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
-    @Column(name = "username", unique = true)
+    @Column(unique = true)
     private String username;
-    @Column(name = "lastName")
+
     private String lastName;
-    @Column(name = "age")
-    private Long age;
-    @Column(name = "email")
+
+    private int age;
+
     private String email;
-    @Column(name = "password")
+
     private String password;
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles",
+    @Fetch(FetchMode.JOIN)
+    @ManyToMany
+    @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     private Set<Role> roles;
+
+    public User(String username, String lastName, int age, String email, String password) {
+        this.username = username;
+        this.lastName = lastName;
+        this.age = age;
+        this.email = email;
+        this.password = password;
+    }
 
     public User() {
 
     }
 
-    public User(String username, String lastName, Long age, String email, String password, Set<Role> roles) {
+    public User(String username, String lastName, int age, String email, String password, Set<Role> roles) {
         this.username = username;
         this.lastName = lastName;
         this.age = age;
@@ -79,11 +88,11 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public Long getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(Long age) {
+    public void setAge(int age) {
         this.age = age;
     }
 
