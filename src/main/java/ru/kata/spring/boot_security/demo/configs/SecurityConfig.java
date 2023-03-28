@@ -28,22 +28,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests() // начало настройки авторизации запросов
-                .antMatchers("/").permitAll() // доступ к главной странице разрешен всем
-                .antMatchers("/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN") // доступ к страницам пользователям и админам
-                .antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN") // доступ к страницам администраторам
-                .anyRequest().authenticated() // все другие запросы должны быть аутентифицированы
+                .authorizeRequests()
+                .antMatchers("/").permitAll()
+                .antMatchers("/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
+                .anyRequest().authenticated()
                 .and()
-                .formLogin() // начало настройки формы для входа
-                .loginPage("/login") // страница для входа на сайт
-                .successHandler(successUserHandler) // обработчик успешной авторизации
-                .permitAll() // доступ к странице входа всем разрешен
+                .formLogin()
+                .loginPage("/login")
+                .successHandler(successUserHandler)
+                .permitAll()
                 .and()
-                .logout() // начало настройки выхода пользователя
-                .permitAll() // доступ к выходу пользователя всем разрешен
-                .logoutRequestMatcher((new AntPathRequestMatcher("/logout"))) // URL для выхода пользователя
-                .logoutSuccessUrl("/login") // URL для перенаправления после успешного выхода
-                .and().csrf().disable(); // отключение защиты от CSRF атак
+                .logout()
+                .permitAll()
+                .logoutRequestMatcher((new AntPathRequestMatcher("/logout")))
+                .logoutSuccessUrl("/login")
+                .and().csrf().disable();
     }
 
 
